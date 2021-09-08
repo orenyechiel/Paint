@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>Paint programs</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="style.css">
+
+    <script src="vue.global.js"></script>
+</head>
+
+<body>
+    <div id="wrapper">
+        <h1>Paint 2.0</h1>
+        <div id="toolbar">
+            <div>
+                <label for="brushSize">Size </label>
+                <input id="brushSize" type="range" v-model="penWidth"
+                       min="1" max="20" >
+
+                <label for="brushColor">Color </label>
+                <input id="brushColor" type="color" v-model="brushColor">
+
+                <label for="bgColor">Background </label>
+                <input id="bgColor" type="color" v-model="canvasBg">
+            </div>
+            <div>
+                <label for="fileLoadBtn">Load image </label>
+                <input ref="fileLoad" @change="imageLoader" id="fileLoadBtn" type="file">
+                <button id="clearBtn" @click="clearCanvas">Clear</button>
+            </div>
+        </div>
+        <div>
+            <canvas id="paintCanvas" :style="{backgroundColor: canvasBg}"
+                    ref="theCanvas"
+                    @mousedown="drawing($event)"
+                    @mousemove="drawing($event), getPos($event)"
+                    @mouseup="drawing($event)"
+                    @mouseout="drawing($event)"
+                    width="600" height="400"></canvas>
+        </div>
+
+        <div id="statistics">
+            <span id="mousePos">Pos: {{mousePosX}},{{mousePosY}}</span>
+            <span id="brushSizeVal">Brush Size: {{ penWidth }}</span>
+            <span id="brushColorVal">Brush Color: {{brushColor}}</span>
+        </div>
+
+        <div id="leftImages">
+            <h3>Server</h3>
+            <button @click="saveImg">Save image</button>
+            <button @click="clearAllImages">Delete All</button>
+            <div id="imagesList">
+                <img v-for="img in savedImages" :id="img.id"
+                     key="img.id"
+                     :src="img.src"
+                     @click="getSavedCanvas($event)">
+            </div>
+        </div>
+
+    </div>
+
+
+<script src="app.js"></script>
+</body>
+
+</html>
